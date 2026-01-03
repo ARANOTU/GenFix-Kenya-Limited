@@ -2,8 +2,6 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <meta name="description" content="Learn how Genfix Kenya Limited delivers engineering solutions through a structured process, from assessment and planning to execution and ongoing support.">
-
         <title>GenFix Kenya Limited</title>
         <link rel="stylesheet" href="genfix.css"/>
     </head>
@@ -12,8 +10,12 @@
         <nav class="nav">
             <div class="nav-inner">
                 <div class="logo">GENFIX<span class="muted">Kenya</span></div>
+                <!--Hamburger-->
+                <button class="hamburger" aria-label="Menu">
+                   ≡
+                </button>
                 <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html">About</a></li>
                     <li><a href="S&P.html">Services</a></li>
                     <li><a href="S&P.html">Products</a></li>
                     <li><a href="#process">Process</a></li>
@@ -89,7 +91,7 @@
                 <h2>Get in Touch</h2>
 
                 <div class="contact-grid">
-                    <form class="contact-form" action="#" method="post" onsubmit="alert('This form is demo-only. Replace action with a backend endpoint.'); return false;">
+                    <form class="contact-form" id="contact-form" action="https://formspree.io/f/xjgvqrpd" method="POST" >
                         <label>
                             Full name
                             <input type="text" name="name" required/>
@@ -110,8 +112,14 @@
                             <textarea name="message" rows="5" required></textarea>
                         </label>
 
+                        <!--Hidden Field-->
+                        <input type="hidden" name="_subject" value="New GenFix Website Enquiry">
+
                         <button class="btn-primary" type="submit">Send Message</button>
                     </form>
+
+                    
+                        
                     <aside class="contact-info">
                         <h4>Company Details</h4>
                         <p><strong>GenFix Kenya Limited</strong></p>
@@ -120,27 +128,102 @@
                         <p><strong>Email:</strong> <a href="mailto:genfixkenya@yahoo.com">genfixkenya@yahoo.com</a></p>
 
                         <h4>Working Hours</h4>
-                        <p>Mon - Fri: 8:00 - 17:00<br>Sat: 9:00 - 13:00</p>
+                        <p>Mon - Fri: 8:00Hrs - 17:00Hrs<br>Sat: 9:00Hrs - 13:00Hrs</p>
                     </aside>
+                   
                 </div>
             </div>
+            
         </section>
+
+        
+
         <!--FOOTER-->
         <footer class="footer">
             <div class="container small">
                 <div class="footer-grid">
                     <div>© <span id="year"></span> GenFix Kenya Limited</div>
-                    <div>Designed & Built - By KONG🦍 </div>
+                    <div>Designed & Built - By KONG🦍</div>
                 </div>
             </div>
         </footer>
+
+         <!--Fullscreen Status Overlay-->
+    <div id="status-overlay">
+        <div class="status-box">
+            <p id="form-status"></p>
+        </div>
+    </div>
     <script>
       // Insert current year
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
+
+   <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+        });
+
+        //Close menu when any link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('show');
+            });
+        });
+    </script>
+
+    <script>
+        const form = document.getElementById('contact-form');
+        const overlay = document.getElementById('status-overlay');
+        const statusText = document.getElementById('form-status');
+        
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault(); // stop default form submit
+            const formData = new FormData(form);
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                    headers: {'Accept': 'application/json'}
+                });
+
+                if (response.ok) {
+                    showMessage(
+                        "✅Thank you! Your message has been sent successfully. We'll get back to you Shortly.",
+                        "success",
+                        true
+                    );
+                } else {
+                    showMessage(
+                        "Oops! Something went wrong😔😔.Please try again.",
+                        "error",
+                        false
+                    );
+                }
+            } catch (error) {
+                showMessage(
+                    "Network error. Please check your connection.",
+                    "error",
+                    false
+                );
+            }
+        });
+        function showMessage(message, type, shouldReload) {
+            statusText.textContent = message;
+            statusText.className = type;
+            overlay.style.display = "flex";
+
+            setTimeout(() => {
+                overlay.style.display = "none";
+
+                if (shouldReload) window.location.reload();
+                
+            }, 3000); // visible for 3 seconds
+        }
+        
+    </script>
     </body>
-
 </html>
-
-
-
